@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+import web3
 
 
 def query_subgraph(query):
@@ -45,6 +46,7 @@ def get_all_interesting_prediction_contracts():
         for order in new_orders:
             contracts[order["id"]] = {
                 "name": order["token"]["name"],
+                "address": order["id"],
                 "symbol": order["token"]["symbol"],
                 "blocks_per_epoch": order["blocksPerEpoch"],
                 "blocks_per_subscription": order["blocksPerSubscription"],
