@@ -8,7 +8,7 @@ First cut: it may work, with errors
 
 ## How to run
 
-For full flow see (README)[https://github.com/oceanprotocol/pdr-trueval/blob/main/README_local_full_flow.md]
+For full flow see [README](https://github.com/oceanprotocol/pdr-trueval/blob/main/README_local_full_flow.md)
 
 ```bash
 export RPC_URL=http://127.0.0.1:8545
