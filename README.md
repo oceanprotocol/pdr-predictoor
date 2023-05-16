@@ -34,7 +34,7 @@ python3 main.py
 ```
 
 ## Fork and customize
-  The actual prediction code is in prd_predictoors/predictions/predict.py.
+  The actual prediction code is in [prd_predictoors/predictions/predict.py](https://github.com/oceanprotocol/pdr-predictoors/blob/main/pdr_predictoors/predictions/predict.py#L3-L8).
   
   We call predict_function with 2 args:
    - topic:  this is ERC20.name
