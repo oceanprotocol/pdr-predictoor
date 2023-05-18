@@ -6,8 +6,11 @@ from pdr_predictoors.utils.threads import NewPrediction
 """ Get all intresting topics that we can predict.  Like ETH-USDT, BTC-USDT """
 topics = get_all_interesting_prediction_contracts()
 def process_block(block,avergage_time_between_blocks):
+    global topics
     """ Process each contract and see if we need to submit """
     print(f"Got new block: {block['number']}...")
+    if not topics:
+        topics = get_all_interesting_prediction_contracts()
     threads=[]
     for address in topics:
         topic = topics[address]
