@@ -8,7 +8,7 @@ from pdr_predictoors.predictions.predict import predict_function
 threads_lock = threading.Lock()
 
 class NewPrediction(Thread):
-    def __init__(self,topic,predictor_contract,current_block_num,avergage_time_between_blocks,epoch):
+    def __init__(self,topic,predictor_contract,current_block_num,avergage_time_between_blocks,epoch,blocks_per_epoch):
         # execute the base constructor
         Thread.__init__(self)
         # set a default value
@@ -20,23 +20,24 @@ class NewPrediction(Thread):
         self.predictor_contract = predictor_contract
         self.current_block_num = current_block_num
         self.avergage_time_between_blocks = avergage_time_between_blocks
+        self.blocks_per_epoch = blocks_per_epoch
 
     def run(self):
-        """ Add 5 blocks, because it will take some time to 1) calculate a prediction 2) submit tx  3) wait for tx to confirm"""
-        soonest_block = self.predictor_contract.soonest_block_to_predict(self.current_block_num+5)
+        soonest_block = (self.epoch+2)*self.blocks_per_epoch
         now = datetime.now(timezone.utc).timestamp()
         estimated_time = now + (soonest_block - self.current_block_num)* self.avergage_time_between_blocks
         (predicted_value,predicted_confidence) = predict_function(self.topic['name'],self.topic['address'],estimated_time)
-        """ We have a prediction, let's submit it"""
-        stake_amount = os.getenv("STAKE_AMOUNT",1)*predicted_confidence/100
-        try:
-            threads_lock.acquire()
-            print(f"Contract:{self.predictor_contract.contract_address} - Submiting prediction for slot:{soonest_block}")
-            self.predictor_contract.submit_prediction(predicted_value,stake_amount,soonest_block)
-        except:
+        if predicted_value is not None and predicted_confidence>0:
+            """ We have a prediction, let's submit it"""
+            stake_amount = os.getenv("STAKE_AMOUNT",1)*predicted_confidence/100
+            try:
+                threads_lock.acquire()
+                print(f"Contract:{self.predictor_contract.contract_address} - Submiting prediction for slot:{soonest_block}")
+                self.predictor_contract.submit_prediction(predicted_value,stake_amount,soonest_block)
+            except:
                 pass
-        finally:
-            threads_lock.release()
+            finally:
+                threads_lock.release()
         """ claim payouts if needed """
         trueValSubmitTimeoutBlock = self.predictor_contract.get_trueValSubmitTimeoutBlock()
         blocks_per_epoch = self.predictor_contract.get_blocksPerEpoch()

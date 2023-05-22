@@ -47,6 +47,20 @@ python3 main.py
 
   You need to change the function code and do some of your stuff. Now, it's just doing some random predictions
 
+## BLOCKS_TILL_EPOCH_END
+  If we want to predict the value for epoch E, we need to do it in epoch E - 2 (latest.  Of course, we could predictor values for a distant epoch in the future if we want to)
+  And to do so, our tx needs to be confirmed in the last block of epoch (otherwise, it's going to be part of next epoch and our prediction tx will revert)
+  
+  But, for every prediction, there are some steps involved, each one taking it's toll on duration:
+    - the actual prediction code
+    - time to generate the tx
+    - time until your pending tx in mempool is picked by miner
+    - time until your tx is confirmed in a block
+
+  You can control how early to predict, taking the above in consideration, using env BLOCKS_TILL_EPOCH_END.
+  It's translation is:  With how many blocks in advanced untill epoch end do we start the prediction process.
+  The default value is 5, which leaves us enough time.  (Ie: if block generation duration is 12 sec, we have 60 seconds to do our job)
+
 ## TO DO
   - [ ]  - implement logic for STAKE_TOKENS and CONTRACTS_TO_PREDICT
   - [ ]  - improve payouts collect flow
