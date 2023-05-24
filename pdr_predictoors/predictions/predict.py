@@ -17,5 +17,6 @@ def predict_function(topic,contract_address, estimated_time):
             predicted_value = True if candles[0][1]>candles[1][1] else False
             print(f"Predicting {predicted_value} with a confidence of {predicted_confidence}")
     except Exception as e:
+        print(e)
         pass
     return(predicted_value,predicted_confidence)

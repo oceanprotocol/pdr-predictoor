@@ -12,7 +12,6 @@ def process_block(block,avergage_time_between_blocks):
     if not topics:
         topics = get_all_interesting_prediction_contracts()
     print(f"Got new block: {block['number']} with {len(topics)} topics")
-    threads=[]
     for address in topics:  
         topic = topics[address]
         predictor_contract = PredictorContract(address)
@@ -23,14 +22,10 @@ def process_block(block,avergage_time_between_blocks):
         if epoch > topic['last_submited_epoch'] and blocks_till_epoch_end<=int(os.getenv("BLOCKS_TILL_EPOCH_END",5)):
             """ Let's make a prediction & claim rewards"""
             thr = NewPrediction(topic,predictor_contract,block["number"],avergage_time_between_blocks,epoch,blocks_per_epoch)
-            thr.start()
-            threads.append(thr)
-    """ Wait for all threads to finish"""
-    for thr in threads:
-        thr.join()
-        address=thr.values['contract_address'].lower()
-        new_epoch = thr.values['last_submited_epoch']
-        topics[address]["last_submited_epoch"]=new_epoch
+            thr.run()
+            address=thr.values['contract_address'].lower()
+            new_epoch = thr.values['last_submited_epoch']
+            topics[address]["last_submited_epoch"]=new_epoch
         
 
 

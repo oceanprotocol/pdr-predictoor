@@ -5,12 +5,8 @@ from datetime import datetime, timedelta, timezone
 from threading import Thread
 from pdr_predictoors.predictions.predict import predict_function
 
-threads_lock = threading.Lock()
-
 class NewPrediction(Thread):
     def __init__(self,topic,predictor_contract,current_block_num,avergage_time_between_blocks,epoch,blocks_per_epoch):
-        # execute the base constructor
-        Thread.__init__(self)
         # set a default value
         self.values = { "last_submited_epoch": epoch,
                       "contract_address": predictor_contract.contract_address   
@@ -30,25 +26,14 @@ class NewPrediction(Thread):
         if predicted_value is not None and predicted_confidence>0:
             """ We have a prediction, let's submit it"""
             stake_amount = os.getenv("STAKE_AMOUNT",1)*predicted_confidence/100
-            try:
-                threads_lock.acquire()
-                print(f"Contract:{self.predictor_contract.contract_address} - Submiting prediction for slot:{soonest_block}")
-                self.predictor_contract.submit_prediction(predicted_value,stake_amount,soonest_block)
-            except:
-                pass
-            finally:
-                threads_lock.release()
+            print(f"Contract:{self.predictor_contract.contract_address} - Submiting prediction for slot:{soonest_block}")
+            self.predictor_contract.submit_prediction(predicted_value,stake_amount,soonest_block)
+        else:
+            print(f"We do not submit, prediction function returned ({predicted_value}, {predicted_confidence})")
         """ claim payouts if needed """
         trueValSubmitTimeoutBlock = self.predictor_contract.get_trueValSubmitTimeoutBlock()
         blocks_per_epoch = self.predictor_contract.get_blocksPerEpoch()
         slot = self.epoch*blocks_per_epoch - trueValSubmitTimeoutBlock-1 
-        #print(f"trueValSubmitTimeoutBlock: {trueValSubmitTimeoutBlock}, blocks_per_epoch: {blocks_per_epoch}, slot: {slot}")
-        try:
-            threads_lock.acquire()
-            print(f"Contract:{self.predictor_contract.contract_address} - Claiming revenue for slot:{slot}")
-            self.predictor_contract.payout(slot)
-        except:
-                pass
-        finally:
-             threads_lock.release()
+        print(f"Contract:{self.predictor_contract.contract_address} - Claiming revenue for slot:{slot}")
+        self.predictor_contract.payout(slot)
             

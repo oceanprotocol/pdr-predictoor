@@ -66,9 +66,11 @@ class PredictorContract:
         gasPrice = w3.eth.gas_price
         try:
             tx = self.contract_instance.functions.submitPredval(predicted_value,amount_wei,prediction_block).transact({"from":owner,"gasPrice":gasPrice})
+            print(f"Submitted prediction, txhash: {tx.hex()}")
             receipt = w3.eth.wait_for_transaction_receipt(tx)
             return receipt
-        except:
+        except Exception as e:
+            print(e)
             return None
     
     def get_trueValSubmitTimeoutBlock(self):
@@ -85,9 +87,11 @@ class PredictorContract:
         gasPrice = w3.eth.gas_price
         try:
             tx = self.contract_instance.functions.payout(slot,owner).transact({"from":owner,"gasPrice":gasPrice})
+            print(f"Submitted payout, txhash: {tx.hex()}")
             receipt = w3.eth.wait_for_transaction_receipt(tx)
             return receipt
-        except:
+        except Exception as e:
+            print(e)
             return None
 
 def get_contract_abi(contract_name):
