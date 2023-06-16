@@ -108,6 +108,25 @@ Some other useful commands:
 
 You can find more [on pm2's official website](https://pm2.keymetrics.io/docs/usage/quick-start/)
 
+## Build a container image
+
+Make sure you have either Docker or Podman installed in your system. Run one of the following commands from the root directory of the repo:
+
+```bash
+# if docker is installed
+docker build -t pdr-predictoor:latest .
+# if podman is installed
+podman build -t pdr-predictoor:latest .
+```
+
+This command builds the container image using the Dockerfile in the current directory and tags it as `pdr-predictoor:latest`. You can use any tag you'd like.
+
+There are many options available for deploying the container image. Some of them include:
+- [Heroku - Container Registry & Runtime (Docker Deploys)](https://devcenter.heroku.com/articles/container-registry-and-runtime)
+- [AWS -  Deploy Docker Containers on Amazon ECS](https://aws.amazon.com/getting-started/hands-on/deploy-docker-containers/)
+- [Google Cloud - Deploying to Cloud Run](https://cloud.google.com/run/docs/deploying)
+- [Azure - Azure Container Instances (ACI)](#running-on-azure-as-a-container)
+
 ## Running on Azure as a Container
 
 > **Warning**
@@ -119,18 +138,9 @@ In order to run the PDR Predictoor on Azure, you will have to build a container,
 
 Follow the instructions from [Microsoft's website](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli#install) to install. Then type `az login` in the terminal to log-in.
 
-### Build the container image
+### Build a container image
 
-Make sure you have either Docker or Podman installed in your system. Run one of the following commands from the root directory of the repo:
-
-```bash
-# if docker is installed
-docker build -t pdr-predictoor:latest .
-# if podman is installed
-podman build -t pdr-predictoor:latest .
-```
-
-This command builds the container image using the Dockerfile in the current directory and tags it as `pdr-predictoor:latest`. You can use any tag you'd like. You'll need the tag in the upcoming steps.
+Follow the instructions in [Building a container image](#build-a-container-image) section.
 
 ### Setting up Azure Container Registry (ACR)
 
