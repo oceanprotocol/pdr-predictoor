@@ -110,6 +110,9 @@ You can find more [on pm2's official website](https://pm2.keymetrics.io/docs/usa
 
 ## Running on Azure as a Container
 
+> **Warning**
+> The information provided in this documentation is up to date as of June 2023. If you encounter any issues or need the latest instructions, please refer to [Azure's official documentation](https://learn.microsoft.com/en-us/azure/app-service/tutorial-custom-container?tabs=azure-cli&pivots=container-linux) on running containers.
+
 In order to run the PDR Predictoor on Azure, you will have to build a container, upload it to Azure Container Registry, and finally run it using Azure Container Instances.
 
 ### Install Azure CLI
@@ -123,12 +126,11 @@ Make sure you have either Docker or Podman installed in your system. Run one of 
 ```bash
 # if docker is installed
 docker build -t pdr-predictoor:latest .
-
 # if podman is installed
 podman build -t pdr-predictoor:latest .
 ```
 
-This command builds the container image using the Dockerfile in the current directory and tags it as `pdr-predictoor:latest`, you can use any tag you'd like. You'll need the tag in the upcoming steps.
+This command builds the container image using the Dockerfile in the current directory and tags it as `pdr-predictoor:latest`. You can use any tag you'd like. You'll need the tag in the upcoming steps.
 
 ### Setting up Azure Container Registry (ACR)
 
@@ -143,7 +145,6 @@ az acr create --name <ACR_NAME> --resource-group <resource group name> --sku <sk
 - --name: The name of the container registry. It should be specified in lower case. You will need it in the next step.
 - --resource-group: The name of the resource group where you want to create the ACR. You can learn more about managing resource groups from [Azure's documentation](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal).
 - --sku: Pricing tier for ACR, accepted values are: `Basic`, `Standard`, `Premium`.
-
 
 ### Pushing the container image to ACR
 
@@ -160,7 +161,6 @@ az acr login --name <acr_name>
 
 > **Note**
 > If you need to get access token you can use `--expose-token` parameter and login using `podman/docker login` command.
-
 Next step is to push the container image.
 
 ```bash
@@ -195,7 +195,6 @@ az container create --resource-group <resource-group-name> --name <container-ins
 
 > **Note**
 > You can set the enviroment variables defined in [Configure Enviroment Variables](#configure-environment-variables) step by passing a `--environment-variables <env-variables>` parameter to the `az container create` command.
-
 Please see the [documentation](https://learn.microsoft.com/en-us/cli/azure/container?view=azure-cli-latest#az-container-create) to learn about all available commands.
 
 ### Monitoring the logs
