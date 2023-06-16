@@ -38,7 +38,7 @@ Edit the .env file and set the following environment variables:
 - CONTRACTS_TO_PREDICT: List of ticker-timespan-source pairs to make predictions on, if empty the app will predict on all available pairs. For this example, set it to 5 minutes BTC/TUSD Binance pair: `"["BTC/TUSD-5m-binance"]"`. You can find a list of available pairs from HERE FIX ME.
 - STAKE_TOKEN: List of Token contract addresses to be used to stake, if empty the app will try to stake with any token. Set this to testOCEAN token address since that's the token you have in your wallet and what the prediction contract accepts: `"["0xFIXME"]"`
 - STAKE_AMOUNT: Determine the amount of tokens to stake if the confidence level is 100%. The final stake is calculated as (STAKE_AMOUNT * confidence / 100).
-- RPC_URL: The RPC URL of the network, set this to Sapphire testnet Websocket RPC URL: `wss://testnet.sapphire.oasis.dev/ws` FIXME HTTP RPC
+- RPC_URL: The RPC URL of the network, set this to Sapphire testnet Websocket RPC URL: `https://testnet.sapphire.oasis.dev`
 - SUBGRAPH_URL: The Ocean subgraph url, set this to Sapphire testnet subgraph URL: `https://v4.subgraph.oasis-sapphire-testnet.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph/graphql`
 
 ### Configure the Prediction Model
