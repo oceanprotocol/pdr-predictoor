@@ -53,7 +53,7 @@ def get_all_interesting_prediction_contracts():
                 new_orders = [
                     result_item
                     for result_item in result["data"]["predictContracts"]
-                    if result_item["token"]["symbol"] in contracts_to_submit
+                    if result_item["token"]["name"] in contracts_to_submit
                 ]
             else:
                 new_orders = result["data"]["predictContracts"]
