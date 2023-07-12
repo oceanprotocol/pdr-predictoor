@@ -1,6 +1,6 @@
 import threading
 import os
-from pdr_predictoors.utils.subgraph import get_all_interesting_prediction_contracts
+from pdr_utils.subgraph import get_all_interesting_prediction_contracts
 from pdr_predictoors.utils.contract import PredictorContract
 from pdr_predictoors.utils.threads import NewPrediction
 
@@ -12,7 +12,7 @@ def process_block(block,avergage_time_between_blocks):
     if not topics:
         topics = get_all_interesting_prediction_contracts()
     print(f"Got new block: {block['number']} with {len(topics)} topics")
-    for address in topics:  
+    for address in topics:
         topic = topics[address]
         predictor_contract = PredictorContract(address)
         epoch = predictor_contract.get_current_epoch()
@@ -26,6 +26,6 @@ def process_block(block,avergage_time_between_blocks):
             address=thr.values['contract_address'].lower()
             new_epoch = thr.values['last_submited_epoch']
             topics[address]["last_submited_epoch"]=new_epoch
-        
+
 
 
